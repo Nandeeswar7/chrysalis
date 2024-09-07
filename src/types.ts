@@ -1,7 +1,7 @@
 export interface Dish {
     id: string;
     name: string;
-    ingredients: string;
+    ingredients: string[];
     diet: 'vegetarian' | 'non vegetarian';
     prep_time: string;
     cook_time: string;
