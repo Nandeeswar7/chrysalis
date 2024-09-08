@@ -24,27 +24,58 @@ export class DishService {
     }
 
     public searchDishes(query: string) {
-        const dishes = this.repository.getAllDishes()
+        const dishes = this.repository.getAllDishes();
         const lowerCaseQuery = query.toLowerCase();
-        return dishes.filter(dish =>
-            dish.name.toLowerCase().includes(lowerCaseQuery) ||
-            dish.ingredients.some(ingredient => ingredient.toLowerCase().includes(lowerCaseQuery)) ||
-            dish.state.toLowerCase().includes(lowerCaseQuery)
-        ).map(dish => ({id: dish.id, name: dish.name}))
+    
+        // Filter dishes by name
+        let nameFilteredDishes = dishes.filter(dish =>
+            dish.name.toLowerCase().includes(lowerCaseQuery)
+        );
+    
+        // Filter dishes by ingredients
+        const otherFilteredDishes = dishes.filter(dish => {
+    
+            // Check for matches with ingredients
+            const ingredientMatch = dish.ingredients.some(ingredient =>
+                ingredient.toLowerCase() === lowerCaseQuery || ingredient.toLowerCase().split(/\s+/).includes(lowerCaseQuery)
+            );
+    
+            // Check for matches with state
+            const stateMatch = dish.state.toLowerCase() === lowerCaseQuery || dish.state.toLowerCase().split(/\s+/).includes(lowerCaseQuery)
+
+            return ingredientMatch || stateMatch
+        })
+    
+        // Combine results and remove duplicates
+        const allFilteredDishes = [
+            ...nameFilteredDishes,
+            ...otherFilteredDishes
+        ]
+        const uniqueDishes = Array.from(new Map(allFilteredDishes.map(dish => [dish.id, dish])).values());
+    
+        return uniqueDishes.map(dish=>({id: dish.id, name: dish.name}));
     }
+    
 
-    public getAllIngredients() {
-        const dishes = this.repository.getAllDishes()
-        const ingredients = dishes.reduce((acc: string[],dish) => {
-            return [...acc,...dish.ingredients]
-        },[])
-
-        return Array.from(new Set(ingredients)).sort()
+    public getAllIngredients(): string[] {
+        // Retrieve all dishes from the repository
+        const dishes = this.repository.getAllDishes() || [];
+    
+        // Flatten and collect ingredients from all dishes
+        const ingredients: string[] = dishes.flatMap(dish => dish.ingredients || []);
+    
+        // Normalize ingredients to lowercase and remove duplicates
+        return Array.from(new Set(
+            ingredients.map(ingredient => ingredient.toLowerCase())
+        )).sort()
+    
     }
-
     public getDishesByIngredients(ingredients: string[]) {
         const dishes = this.repository.getAllDishes()
-        const filteredDishes = dishes.filter(dish => dish.ingredients.every(ele => ingredients.includes(ele)))
-        return filteredDishes
+        return dishes.filter(dish =>
+            dish.ingredients.every(ele =>
+                ingredients.some(ing => ing.toLowerCase() === ele.toLowerCase())
+            )
+        );
     }
 }
