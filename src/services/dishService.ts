@@ -1,4 +1,3 @@
-// services/DishService.ts
 import { DishRepository } from '../repositories/dishRepository';
 
 export class DishService {
@@ -32,5 +31,14 @@ export class DishService {
             dish.ingredients.some(ingredient => ingredient.toLowerCase().includes(lowerCaseQuery)) ||
             dish.state.toLowerCase().includes(lowerCaseQuery)
         ).map(dish => ({id: dish.id, name: dish.name}))
+    }
+
+    public getAllIngredients() {
+        const dishes = this.repository.getAllDishes()
+        const ingredients = dishes.reduce((acc: string[],dish) => {
+            return [...acc,...dish.ingredients]
+        },[])
+
+        return Array.from(new Set(ingredients)).sort()
     }
 }

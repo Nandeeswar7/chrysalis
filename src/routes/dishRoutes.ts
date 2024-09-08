@@ -1,4 +1,3 @@
-// routes/dishes.ts
 import { Router, Request, Response } from 'express';
 import { DishService } from '../services/dishService';
 
@@ -30,17 +29,27 @@ router.get('/dishes/:id', (req: Request, res: Response) => {
 });
 
 
-router.get('/search', async (req: Request, res: Response) => {
+router.get('/search', (req: Request, res: Response) => {
     try {
-        const query = req.query.q as string; // Retrieve the query string from the request
+        const query = req.query.q as string;
         if (!query) {
             return res.status(400).json({ message: 'Query string is required' });
         }
         
-        const results = await dishService.searchDishes(query); // Call searchDishes method
+        const results = dishService.searchDishes(query);
         res.json(results);
     } catch (error) {
         console.error('Error handling search request:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+router.get('/ingredients', (req: Request, res: Response) => {
+    try {
+        const results = dishService.getAllIngredients();
+        res.json(results)
+    } catch (error) {
+        console.error('Error fetching ingredients:', error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
