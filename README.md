@@ -7,9 +7,9 @@ cd chrysalis-api
 ```
 
 ### 2. Create .env file (optional)
-This step can be skipped. Application will run on port 4000 if skipped
-Create a .env file in the root directory of the project
-Configure PORT
+This step can be skipped. Application will run on port 4000 if skipped.  
+Create a .env file in the root directory of the project.  
+Configure PORT.
 
 ```
 PORT=4000
