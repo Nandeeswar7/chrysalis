@@ -1,6 +1,6 @@
 ## LOCAL SETUP
 
-### 1.Clone the project
+### 1. Clone the project
 ```
 git clone https://github.com/Nandeeswar7/chrysalis-api.git
 cd chrysalis-api
