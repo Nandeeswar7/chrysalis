@@ -41,4 +41,10 @@ export class DishService {
 
         return Array.from(new Set(ingredients)).sort()
     }
+
+    public getDishesByIngredients(ingredients: string[]) {
+        const dishes = this.repository.getAllDishes()
+        const filteredDishes = dishes.filter(dish => dish.ingredients.every(ele => ingredients.includes(ele)))
+        return filteredDishes
+    }
 }

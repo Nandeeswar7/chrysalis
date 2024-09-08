@@ -54,4 +54,16 @@ router.get('/ingredients', (req: Request, res: Response) => {
     }
 });
 
+router.post('/dishes-by-ingredients', (req: Request, res: Response) => {
+    try {
+        const {ingredients} = req.body
+        if(!ingredients || !Array.isArray(ingredients)) return res.status(400).json({message: "a list of ingredients is required"})
+        const results = dishService.getDishesByIngredients(ingredients)
+        res.json(results)
+    } catch(error) {
+        console.error('Error fetching ingredients:', error);
+        res.status(500).json({message: 'Internal Server Error'})
+    }
+})
+
 export default router;
