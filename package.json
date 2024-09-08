@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "start": "ts-node src/app.ts", 
+    "start": "ts-node src/app.ts",
     "dev": "nodemon --watch src/**/*.ts --exec ts-node src/app.ts"
   },
   "keywords": [],
@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "csv-parser": "^3.0.0",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2"
   },
   "devDependencies": {

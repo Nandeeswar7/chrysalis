@@ -4,3 +4,6 @@ node_modules/
 # compiled typescript files
 build/
 dist/
+
+#env
+.env
